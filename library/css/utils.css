@@ -1,0 +1,140 @@
+/* UTILS */
+.d-flex {
+  display: flex;
+}
+
+.f-col {
+  flex-direction: column;
+}
+
+.f-row {
+  flex-direction: row;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.normal-font {
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--black);
+}
+
+.large-font {
+  font-size: 16px;
+  font-weight: normal;
+  color: var(--black);
+}
+
+.small-font {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--black);
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.font-weight-400 {
+  font-weight: 400;
+}
+
+.font-weight-500 {
+  font-weight: 500;
+}
+
+.color-blur-gray {
+  color: var(--blur-gray);
+}
+
+.color-main {
+  color: var(--main-color);
+}
+
+.bg-pink {
+  background: var(--pink);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-half {
+  width: 50%;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.gap-2 > div {
+  margin: 8px;
+}
+
+.gap-2 > div:first-child {
+  margin-left: 0;
+}
+
+.gap-2 > div:last-child {
+  margin-right: 0;
+}
+
+.col-2 {
+  flex: 16.6%;
+}
+
+.col-3 {
+  flex: 25%;
+}
+
+.col-4 {
+  flex: 33%;
+}
+
+.col-6 {
+  flex: 50%;
+}
+
+.col-12 {
+  flex: 100%;
+}
+
+.mb-1 {
+  margin-bottom: 4px;
+}
+
+.mb-2 {
+  margin-bottom: 8px;
+}
+
+.my-1 {
+  margin-top: 4px !important;
+}
+
+.my-2 {
+  margin-top: 8px !important;
+}
