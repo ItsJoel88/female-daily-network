@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import "./App.css";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { SET_TYPE } from "./store/type";
+
+// Library
 import "library/css/main.css";
-import iconMenu from "library/images/icon-menu.png";
 import fdLogo from "library/images/fd-logo.png";
 import userPlaceholder from "library/images/placeholder_user.png";
 import exampleProduct from "library/images/example-product.jpg";
 import exampleBrand from "library/images/example-brand.jpg";
-import exampleProductWeb from "library/images/example-product.webp";
 import popularIcon from "library/images/popular-icon.png";
 import iconAppStore from "library/images/icon-app-store.png";
 import iconPlayStore from "library/images/icon-playstore.png";
@@ -15,61 +17,39 @@ import iconTwitter from "library/images/icon-twitter.png";
 import iconIG from "library/images/icon-ig.png";
 import iconYT from "library/images/icon-yt.png";
 
+// Components
+import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import ProductCard from "./components/ProductCard";
+import Rating from "./components/Rating";
+
 function App() {
+  const { reviews, articles, editorChoice } = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    fetch("https://virtserver.swaggerhub.com/hqms/FDN-WP/0.1/wp")
+      .then((resp) => resp.json())
+      .then((resp) => {
+        dispatch({
+          type: SET_TYPE,
+          value: {
+            reviews: resp["latest review"],
+            articles: resp["latest articles"],
+            editorChoice: resp["editor's choice"],
+          },
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       {/* <!-- HEADER --> */}
-      <header className="main-header">
-        <img
-          src={iconMenu}
-          alt="icon-menu"
-          className="img-icon cursor-pointer"
-        />
-        <img src={fdLogo} alt="icon-company" className="img-logo" />
-        <span className="input-search-wrapper w-half">
-          <input
-            type="text"
-            placeholder="Search products, articles, topics, brands, etc"
-            className="input-search w-full"
-          />
-        </span>
-        <button className="btn btn-large">Login/Signup</button>
-      </header>
+      <Header />
 
       {/* <!-- NAVBAR --> */}
-      <section className="navbar-container">
-        <div className="navbar-menu">
-          <a href="#"> Skincare </a>
-        </div>
-
-        <div className="navbar-menu">
-          <a href="#"> Make up </a>
-        </div>
-
-        <div className="navbar-menu">
-          <a href="#"> Body </a>
-        </div>
-
-        <div className="navbar-menu">
-          <a href="#"> Hair </a>
-        </div>
-
-        <div className="navbar-menu">
-          <a href="#"> Fragrance </a>
-        </div>
-
-        <div className="navbar-menu">
-          <a href="#"> Nails </a>
-        </div>
-
-        <div className="navbar-menu">
-          <a href="#"> Tools </a>
-        </div>
-
-        <div className="navbar-menu">
-          <a href="#"> Brands </a>
-        </div>
-      </section>
+      <Navbar />
 
       {/* <!-- CARD --> */}
       <section className="d-flex f-col align-items-center main-body">
@@ -82,190 +62,24 @@ function App() {
           <span className="section-subtitle">Curated with love</span>
           <div className="section-content">
             <div className="row gap-2">
-              <div className="col-2">
-                <div className="product-card">
-                  <div className="head">
-                    <img src={userPlaceholder} alt="user" />
-                    <div className="info">
-                      <span className="title">Arinda</span>
-                      <span className="subtitle">Senior Editor</span>
-                    </div>
+              {editorChoice.map((choice, idx) => {
+                return (
+                  <div key={idx} className="col-2">
+                    <ProductCard
+                      header={{
+                        image: userPlaceholder,
+                        title: choice.editor,
+                        subtitle: choice.role,
+                      }}
+                      img={choice.product.image}
+                      rating={choice.product.rating}
+                      totalCount={1}
+                      title={choice.product.name}
+                      subtitle={choice.product.description}
+                    />
                   </div>
-
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-2">
-                <div className="product-card">
-                  <div className="head">
-                    <img src={userPlaceholder} alt="user" />
-                    <div className="info">
-                      <span className="title">Arinda</span>
-                      <span className="subtitle">Senior Editor</span>
-                    </div>
-                  </div>
-
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-2">
-                <div className="product-card">
-                  <div className="head">
-                    <img src={userPlaceholder} alt="user" />
-                    <div className="info">
-                      <span className="title">Arinda</span>
-                      <span className="subtitle">Senior Editor</span>
-                    </div>
-                  </div>
-
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-2">
-                <div className="product-card">
-                  <div className="head">
-                    <img src={userPlaceholder} alt="user" />
-                    <div className="info">
-                      <span className="title">Arinda</span>
-                      <span className="subtitle">Senior Editor</span>
-                    </div>
-                  </div>
-
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-2">
-                <div className="product-card">
-                  <div className="head">
-                    <img src={userPlaceholder} alt="user" />
-                    <div className="info">
-                      <span className="title">Arinda</span>
-                      <span className="subtitle">Senior Editor</span>
-                    </div>
-                  </div>
-
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -297,99 +111,39 @@ function App() {
             <div className="col-6">
               <div className="row gap-2">
                 <div className="col-3">
-                  <div className="product-card">
-                    <img
-                      src={exampleProduct}
-                      alt="product"
-                      className="product-view"
-                    />
-                    <p className="small-font font-bold color-main my-2">
-                      Match skin type
-                    </p>
-                    <div className="rating-container">
-                      <span className="rating product-rating">4.9</span>
-
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star">&#x2605;</span>
-
-                      <span className="rating product-rating-total">(7)</span>
-                    </div>
-
-                    <div className="info-container">
-                      <span className="title">juice beauty</span>
-
-                      <span className="subtitle">Pure pressed blush</span>
-
-                      <span className="description">Neutral Rose</span>
-                    </div>
-                  </div>
+                  <ProductCard
+                    img={exampleProduct}
+                    imgDesc="Match skin type"
+                    rating={4.9}
+                    totalCount={7}
+                    title="juice beauty"
+                    subtitle="pure pressed blush"
+                    description="neutral rose"
+                  />
                 </div>
 
                 <div className="col-3">
-                  <div className="product-card">
-                    <img
-                      src={exampleProduct}
-                      alt="product"
-                      className="product-view"
-                    />
-                    <p className="small-font font-bold color-main my-2">
-                      Match skin type
-                    </p>
-                    <div className="rating-container">
-                      <span className="rating product-rating">4.9</span>
-
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star">&#x2605;</span>
-
-                      <span className="rating product-rating-total">(7)</span>
-                    </div>
-
-                    <div className="info-container">
-                      <span className="title">juice beauty</span>
-
-                      <span className="subtitle">Pure pressed blush</span>
-
-                      <span className="description">Neutral Rose</span>
-                    </div>
-                  </div>
+                  <ProductCard
+                    img={exampleProduct}
+                    imgDesc="Match skin type"
+                    rating={4.9}
+                    totalCount={7}
+                    title="juice beauty"
+                    subtitle="pure pressed blush"
+                    description="neutral rose"
+                  />
                 </div>
 
                 <div className="col-3">
-                  <div className="product-card">
-                    <img
-                      src={exampleProduct}
-                      alt="product"
-                      className="product-view"
-                    />
-                    <p className="small-font font-bold color-main my-2">
-                      Match skin type
-                    </p>
-                    <div className="rating-container">
-                      <span className="rating product-rating">4.9</span>
-
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star filled">&#x2605;</span>
-                      <span className="rating-star">&#x2605;</span>
-
-                      <span className="rating product-rating-total">(7)</span>
-                    </div>
-
-                    <div className="info-container">
-                      <span className="title">juice beauty</span>
-
-                      <span className="subtitle">Pure pressed blush</span>
-
-                      <span className="description">Neutral Rose</span>
-                    </div>
-                  </div>
+                  <ProductCard
+                    img={exampleProduct}
+                    imgDesc="Match skin type"
+                    rating={4.9}
+                    totalCount={7}
+                    title="juice beauty"
+                    subtitle="pure pressed blush"
+                    description="neutral rose"
+                  />
                 </div>
 
                 <div className="col-3">&nbsp;</div>
@@ -412,122 +166,32 @@ function App() {
           </span>
           <div className="section-content">
             <div className="row gap-2">
-              <div className="article col-4">
-                <img
-                  src={exampleProductWeb}
-                  alt="product-1"
-                  className="article-thumbnail"
-                />
-                <p className="normal-font font-bold">
-                  9 Best Face oils for Sensitive Skin
-                </p>
-                <span className="small-font font-bold color-blur-gray">
-                  Username
-                </span>
-                <span className="small-font color-blur-gray">
-                  {" "}
-                  | 2 hours ago
-                </span>
-              </div>
-
-              <div className="article col-4">
-                <img
-                  src={exampleProductWeb}
-                  alt="product-1"
-                  className="article-thumbnail"
-                />
-                <p className="normal-font font-bold">
-                  9 Best Face oils for Sensitive Skin
-                </p>
-                <span className="small-font font-bold color-blur-gray">
-                  Username
-                </span>
-                <span className="small-font color-blur-gray">
-                  {" "}
-                  | 2 hours ago
-                </span>
-              </div>
-
-              <div className="article col-4">
-                <img
-                  src={exampleProductWeb}
-                  alt="product-1"
-                  className="article-thumbnail"
-                />
-                <p className="normal-font font-bold">
-                  9 Best Face oils for Sensitive Skin
-                </p>
-                <span className="small-font font-bold color-blur-gray">
-                  Username
-                </span>
-                <span className="small-font color-blur-gray">
-                  {" "}
-                  | 2 hours ago
-                </span>
-              </div>
-            </div>
-
-            <div className="row gap-2">
-              <div className="article col-4">
-                <img
-                  src={exampleProductWeb}
-                  alt="product-1"
-                  className="article-thumbnail"
-                />
-                <p className="normal-font font-bold">
-                  9 Best Face oils for Sensitive Skin
-                </p>
-                <span className="small-font font-bold color-blur-gray">
-                  Username
-                </span>
-                <span className="small-font color-blur-gray">
-                  {" "}
-                  | 2 hours ago
-                </span>
-              </div>
-
-              <div className="article col-4">
-                <img
-                  src={exampleProductWeb}
-                  alt="product-1"
-                  className="article-thumbnail"
-                />
-                <p className="normal-font font-bold">
-                  9 Best Face oils for Sensitive Skin
-                </p>
-                <span className="small-font font-bold color-blur-gray">
-                  Username
-                </span>
-                <span className="small-font color-blur-gray">
-                  {" "}
-                  | 2 hours ago
-                </span>
-              </div>
-
-              <div className="article col-4">
-                <img
-                  src={exampleProductWeb}
-                  alt="product-1"
-                  className="article-thumbnail"
-                />
-                <p className="normal-font font-bold">
-                  9 Best Face oils for Sensitive Skin
-                </p>
-                <span className="small-font font-bold color-blur-gray">
-                  Username
-                </span>
-                <span className="small-font color-blur-gray">
-                  {" "}
-                  | 2 hours ago
-                </span>
-              </div>
+              {articles.map((article, idx) => {
+                return (
+                  <div className="article col-4" key={idx}>
+                    <img
+                      src={article.image}
+                      alt="product-1"
+                      className="article-thumbnail"
+                    />
+                    <p className="normal-font font-bold">{article.title}</p>
+                    <span className="small-font font-bold color-blur-gray">
+                      {article.author}
+                    </span>
+                    <span className="small-font color-blur-gray">
+                      {" "}
+                      | {article.published_at}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
 
         {/* <!-- LATEST REVIEWS --> */}
         <div className="d-flex section-card">
-          <div className="w-half">
+          <div className="w-75">
             <span className="section-title">Latest Reviews</span>
             <span className="section-subtitle link">
               So you can make better purchase decision
@@ -535,95 +199,44 @@ function App() {
             </span>
             <div className="section-content">
               <div className="row">
-                <div className="col-6">
-                  <div className="review-card">
-                    <div className="head">
-                      <div className="view">
-                        <img
-                          src={exampleProduct}
-                          alt="review-product"
-                          className="img-product"
-                        />
+                {reviews.map((review, idx) => {
+                  return (
+                    <div className="col-4" key={idx}>
+                      <div className="review-card">
+                        <div className="head">
+                          <div className="view">
+                            <img
+                              src={review.product.image}
+                              alt="review-product"
+                              className="img-product"
+                            />
 
-                        <div className="rating-container">
-                          <span className="rating-star filled">&#x2605;</span>
-                          <span className="rating-star filled">&#x2605;</span>
-                          <span className="rating-star filled">&#x2605;</span>
-                          <span className="rating-star filled">&#x2605;</span>
-                          <span className="rating-star">&#x2605;</span>
+                            <Rating rating={review.star} hideText={true} />
+                          </div>
+
+                          <div className="info">
+                            <span className="title">{review.product.name}</span>
+                            <span className="subtitle">
+                              {review.product.desc}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="content">{review.comment}</div>
+                        <div className="footer">
+                          <img src={userPlaceholder} alt="user" />
+                          <span className="title"> {review.user} </span>
+
+                          <span className="subtitle"> {review.profile.join(', ')} </span>
                         </div>
                       </div>
-
-                      <div className="info">
-                        <span className="title">Val by Valerie Thomas</span>
-                        <span className="subtitle">C E Ferulic</span>
-                      </div>
                     </div>
-                    <div className="content">
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Laboriosam sunt nobis aperiam maiores quisquam temporibus,
-                      eum quibusdam architecto quaerat ab mollitia iusto
-                      reprehenderit molestias dolore quia dolor consectetur cum
-                      esse!
-                    </div>
-                    <div className="footer">
-                      <img src={userPlaceholder} alt="user" />
-                      <span className="title"> Putri Deani </span>
-
-                      <span className="subtitle">
-                        {" "}
-                        Combination Skin, 25-29{" "}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-6">
-                  <div className="review-card">
-                    <div className="head">
-                      <div className="view">
-                        <img
-                          src={exampleProduct}
-                          alt="review-product"
-                          className="img-product"
-                        />
-
-                        <div className="rating-container">
-                          <span className="rating-star filled">&#x2605;</span>
-                          <span className="rating-star filled">&#x2605;</span>
-                          <span className="rating-star filled">&#x2605;</span>
-                          <span className="rating-star filled">&#x2605;</span>
-                          <span className="rating-star">&#x2605;</span>
-                        </div>
-                      </div>
-
-                      <div className="info">
-                        <span className="title">Val by Valerie Thomas</span>
-                        <span className="subtitle">C E Ferulic</span>
-                      </div>
-                    </div>
-                    <div className="content">
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Laboriosam sunt nobis aperiam maiores quisquam temporibus,
-                      eum quibusdam architecto quaerat ab mollitia iusto
-                      reprehenderit molestias dolore quia dolor consectetur cum
-                      esse!
-                    </div>
-                    <div className="footer">
-                      <img src={userPlaceholder} alt="user" />
-                      <span className="title"> Putri Deani </span>
-
-                      <span className="subtitle">
-                        {" "}
-                        Combination Skin, 25-29{" "}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </div>
           </div>
 
-          <div className="w-half">
+          <div className="w-25">
             <span className="section-title">&nbsp;</span>
             <span className="section-subtitle">&nbsp;</span>
             <div className="section-content d-flex justify-end">
@@ -720,9 +333,9 @@ function App() {
                   height="100%"
                   src="https://www.youtube.com/embed/VTVTJJJJBA4"
                   title="YouTube video player"
-                  frameborder="0"
+                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
+                  allowFullScreen
                 >
                   Unable to load the video
                 </iframe>
@@ -733,9 +346,9 @@ function App() {
                   width="100%"
                   src="https://www.youtube.com/embed/VTVTJJJJBA4"
                   title="YouTube video player"
-                  frameborder="0"
+                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
+                  allowFullScreen
                 >
                   Unable to load the video
                 </iframe>
@@ -745,9 +358,9 @@ function App() {
                   width="100%"
                   src="https://www.youtube.com/embed/VTVTJJJJBA4"
                   title="YouTube video player"
-                  frameborder="0"
+                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
+                  allowFullScreen
                 >
                   Unable to load the video
                 </iframe>
@@ -765,177 +378,69 @@ function App() {
           <div className="section-content">
             <div className="row">
               <div className="col-2">
-                <div className="product-card">
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
+                <ProductCard
+                  title="Juice beauty"
+                  rating={4.9}
+                  totalCount={7}
+                  img={exampleProduct}
+                  subtitle="pure pressed blush"
+                  description="neutral rose"
+                />
               </div>
 
               <div className="col-2">
-                <div className="product-card">
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
+                <ProductCard
+                  title="Juice beauty"
+                  rating={4.9}
+                  totalCount={7}
+                  img={exampleProduct}
+                  subtitle="pure pressed blush"
+                  description="neutral rose"
+                />
               </div>
 
               <div className="col-2">
-                <div className="product-card">
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
+                <ProductCard
+                  title="Juice beauty"
+                  rating={4.9}
+                  totalCount={7}
+                  img={exampleProduct}
+                  subtitle="pure pressed blush"
+                  description="neutral rose"
+                />
               </div>
 
               <div className="col-2">
-                <div className="product-card">
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
+                <ProductCard
+                  title="Juice beauty"
+                  rating={4.9}
+                  totalCount={7}
+                  img={exampleProduct}
+                  subtitle="pure pressed blush"
+                  description="neutral rose"
+                />
               </div>
 
               <div className="col-2">
-                <div className="product-card">
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
+                <ProductCard
+                  title="Juice beauty"
+                  rating={4.9}
+                  totalCount={7}
+                  img={exampleProduct}
+                  subtitle="pure pressed blush"
+                  description="neutral rose"
+                />
               </div>
 
               <div className="col-2">
-                <div className="product-card">
-                  <img
-                    src={exampleProduct}
-                    alt="product"
-                    className="product-view"
-                  />
-                  <div className="rating-container">
-                    <span className="rating product-rating">4.9</span>
-
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star filled">&#x2605;</span>
-                    <span className="rating-star">&#x2605;</span>
-
-                    <span className="rating product-rating-total">(7)</span>
-                  </div>
-
-                  <div className="info-container">
-                    <span className="title">juice beauty</span>
-
-                    <span className="subtitle">Pure pressed blush</span>
-
-                    <span className="description">Neutral Rose</span>
-                  </div>
-                </div>
+                <ProductCard
+                  title="Juice beauty"
+                  rating={4.9}
+                  totalCount={7}
+                  img={exampleProduct}
+                  subtitle="pure pressed blush"
+                  description="neutral rose"
+                />
               </div>
             </div>
           </div>
