@@ -325,7 +325,7 @@ function App() {
             <span className="section-link">See more &#10095; </span>
           </span>
           <div className="section-content">
-            <div className="row gap-2">
+            <div className="row nowrap gap-2">
               <div className="col-6">
                 <iframe
                   className="video-frame"
